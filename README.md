@@ -163,9 +163,7 @@ intelimotor/
 ```json
 {
   "price": 250000,
-  "description": "Acura ILX 2018 en excelente estado, mantenimiento al día",
-  "email": "tu-email@ejemplo.com",
-  "password": "tu-password"
+  "description": "Acura ILX 2018 en excelente estado, mantenimiento al día"
 }
 ```
 

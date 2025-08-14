@@ -12,6 +12,7 @@ import './App.css';
 import { publicationsService } from './services/serviceManager';
 import SpinLoader from './components/spinLoader';
 import PopupMessage from './components/PopupMessage';
+import PreviewImage from './components/previewImage';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -22,6 +23,8 @@ function App() {
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('success');
   const [open, setOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState(null);
+  const [openPreview, setOpenPreview] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -37,10 +40,13 @@ function App() {
     console.log('Datos del formulario:', formData);
     try {
       const response = await publicationsService.createPublication(formData);
+
       console.log('Respuesta del servidor:', response);
       setMessage('Anuncio publicado exitosamente!');
       setSeverity('success');
       setOpen(true);
+      setPreviewImage(response.data.base64);
+      setOpenPreview(true);
     } catch (error) {
       console.error('Error al publicar el anuncio:', error);
       setMessage('Error al publicar el anuncio. Por favor, intenta nuevamente.');
@@ -113,7 +119,13 @@ function App() {
         severity={severity}
         onClose={() => setOpen(false)}
       />
+      <PreviewImage 
+        open={openPreview}
+        onClose={() => setOpenPreview(false)}
+        imageBase64={previewImage}
+      />
     </div>
+      
   );
 }
 

@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
+const { v4: uuidv4 } = require('uuid');
 
 /**
  * Servicio para automatizar operaciones en seminuevos.com usando Puppeteer
@@ -155,9 +156,10 @@ class PuppeteerService {
       //   // Esperar confirmación
       //   await this.page.waitForSelector('.success-message, .confirmation', { timeout: 20000 });
 
+      const path = `./screenshots/${uuidv4().replaceAll(/-/g, "")}.png`;
       await new Promise((resolve) => setTimeout(resolve, 50000));
       await this.page.screenshot({
-        path: "llenado.png",
+        path,
         fullPage: true,
         type: "jpeg",
         quality: 100,
@@ -169,7 +171,7 @@ class PuppeteerService {
       // console.log("HTML guardado en form.html");
 
       console.log("Anuncio publicado exitosamente");
-      return true;
+      return path;
     } catch (error) {
       console.error("Error al publicar el anuncio:", error);
       throw error;
@@ -314,7 +316,7 @@ class PuppeteerService {
           }); // opcional: selecciona todo el texto
           await this.page.type(
             `.mantine-RichTextEditor-content p`,
-            carData.descripcion
+            value
           );
           break;
         default:
@@ -385,10 +387,8 @@ class PuppeteerService {
       await this.initializeBrowser();
       await this.navigateToSeminuevos();
       await this.login(email, password);
-      await this.publishCarAd(carData);
-
-      console.log("Proceso de publicación completado exitosamente");
-      return { success: true, message: "Anuncio publicado correctamente" };
+      let path = await this.publishCarAd(carData);
+      return path;
     } catch (error) {
       console.error("Error en el proceso de publicación:", error);
       throw error;

@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 const seminuevosService = require('./service/seminuevosService');
+const fs = require('fs');
 
 const app = express();
 
@@ -35,15 +36,18 @@ app.post('/api/publishCar',async (req, res) => {
     
     res.status(200).json({
       success: true,
-      message: response.message || 'Carro publicado exitosamente',
-      data: carData
+      message: 'Carro publicado exitosamente',
+      data: {
+        imagePath: response,
+        base64: fs.readFileSync(response, { encoding: 'base64' })
+      }
     });
     
   } catch (error) {
     console.error('Error al publicar carro:', error);
     res.status(500).json({
       success: false,
-      message: 'Error interno del servidor'
+      message: 'Servicio no disponible, por favor intente más tarde'
     });
   }
 });

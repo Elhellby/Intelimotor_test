@@ -4,7 +4,8 @@ const axiosInstance = axios.create({
   baseURL: process.env.REACT_APP_BASE_URL_API,
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  timeout: 360000
 });
 
 export const publicationsService = {
